@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuração de Prova: 4 Passos</title>
+    <title>Configuração de Prova: 3 Passos</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <h1>Configuração de Prova</h1>
         
-        <!-- Busca de Gabarito no Cabeçalho -->
-        <header>
-            <h2>Buscar Gabarito</h2>
-            <input type="text" id="searchGabarito" placeholder="Buscar por nome ou data">
-            <button id="btnSearchGabarito">Buscar</button>
-        </header>
-
         <!-- Passo 1: Inserir Gabarito -->
         <section id="passo1">
             <h2>Passo 1: Inserir o Gabarito da Prova</h2>
             <form method="post" id="gabaritoForm">
+                <div class="form-group">
+                    <label for="nomeProva">Nome da Prova:</label>
+                    <input type="text" id="nomeProva" name="nomeProva" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataProva">Data da Prova:</label>
+                    <input type="date" id="dataProva" name="dataProva" required>
+                </div>
                 <div class="form-group">
                     <label for="numQuestions">Número de Questões:</label>
                     <input type="number" id="numQuestions" name="numQuestions" min="1" required>
@@ -46,16 +47,6 @@
             <h2>Passo 2: Inserir Alunos e Gerar Gabaritos</h2>
             <form id="alunosForm">
                 <div class="form-group">
-                    <label for="examName">Nome da Prova:</label>
-                    <input type="text" id="examName" name="examName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="examDate">Data da Prova:</label>
-                    <input type="date" id="examDate" name="examDate" required>
-                </div>
-
-                <div class="form-group">
                     <label for="numStudents">Número de Alunos:</label>
                     <input type="number" id="numStudents" name="numStudents" min="1" required>
                 </div>
@@ -69,6 +60,7 @@
             <div id="alunosMessage" class="message"></div>
             <div id="alunosActions">
                 <button id="editAlunos" style="display:none;">Editar Alunos</button>
+                <button id="visualizarLista" style="display:none;">Visualizar Lista</button>
                 <button id="printAlunos" style="display:none;">Imprimir Folhas de Resposta</button>
             </div>
         </section>
@@ -106,4 +98,3 @@
     <script src="js/camera.js"></script>
 </body>
 </html>
-

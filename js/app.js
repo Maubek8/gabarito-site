@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const gabaritoMessage = document.getElementById("gabaritoMessage");
     const alunosMessage = document.getElementById("alunosMessage");
     const correctionMessage = document.getElementById("correctionMessage");
+    const resultadosDiv = document.getElementById("resultados");
 
     // Gabarito - Passo 1
     const nomeProvaInput = document.getElementById("nomeProva");
@@ -42,6 +43,11 @@ document.addEventListener("DOMContentLoaded", function() {
         gabaritoMessage.textContent = `Gabarito da prova "${nomeProva}" salvo com sucesso para a data ${dataProva}!`;
         document.getElementById("editGabarito").style.display = "inline";
         document.getElementById("printGabarito").style.display = "inline";
+    });
+
+    // Função para imprimir o gabarito
+    document.getElementById('printGabarito').addEventListener('click', function() {
+        window.print();
     });
 
     // Alunos - Passo 2
@@ -92,20 +98,10 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("visualizarLista").style.display = "inline";
         document.getElementById("printAlunos").style.display = "inline";
     });
-// Lógica para buscar gabarito por nome ou data
-document.getElementById('btnSearchGabarito').addEventListener('click', function() {
-    const searchTerm = document.getElementById('searchGabarito').value;
-    if (searchTerm) {
-        alert(`Buscando gabarito para: ${searchTerm}`);
-        // Aqui você pode integrar com a lógica de busca real (banco de dados ou localStorage)
-    } else {
-        alert('Por favor, insira um termo de busca.');
-    }
-});
 
     // Função para visualizar a lista de alunos (em um pop-up)
     const visualizarListaButton = document.getElementById("visualizarLista");
-    visualizarListaButton.addEventListener("click", function() {
+    visualizarListaButton.addEventListener('click', function() {
         const alunosList = studentsInputDiv.querySelectorAll("input[name^='studentName']");
         const raList = studentsInputDiv.querySelectorAll("input[name^='studentRA']");
         let listaAlunos = "Lista de Alunos:\n";
@@ -117,10 +113,84 @@ document.getElementById('btnSearchGabarito').addEventListener('click', function(
         alert(listaAlunos);
     });
 
+    // Função para imprimir folhas de respostas com QR code
+    document.getElementById('printAlunos').addEventListener('click', function() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        const alunosList = studentsInputDiv.querySelectorAll("input[name^='studentName']");
+        const raList = studentsInputDiv.querySelectorAll("input[name^='studentRA']");
+
+        alunosList.forEach((aluno, index) => {
+            const raAluno = raList[index].value;
+            pdf.text(`Nome: ${aluno.value}`, 10, 10 + (index * 30));
+            pdf.text(`RA: ${raAluno}`, 10, 20 + (index * 30));
+
+            const qrcode = new QRCode(document.createElement('div'), {
+                text: raAluno,
+                width: 128,
+                height: 128
+            });
+            const imgData = qrcode._el.querySelector('img').src;
+            pdf.addImage(imgData, 'PNG', 10, 30 + (index * 30), 50, 50);  // Ajustar posição de acordo com o layout
+        });
+
+        pdf.save('folhas-de-resposta.pdf');
+    });
+
+    // Função para buscar gabarito por nome ou data
+    document.getElementById('btnSearchGabarito').addEventListener('click', function() {
+        const searchTerm = document.getElementById('searchGabarito').value;
+        if (searchTerm) {
+            alert(`Buscando gabarito para: ${searchTerm}`);
+            // Aqui você pode integrar com a lógica de busca real (banco de dados ou localStorage)
+        } else {
+            alert('Por favor, insira um termo de busca.');
+        }
+    });
+
+    // Captura de Gabarito via Câmera - Passo 3
+    document.getElementById('captureButton').addEventListener('click', function() {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+        if (code) {
+            correctionMessage.style.display = "block";
+            correctionMessage.textContent = "QR Code detectado: " + code.data;
+
+            const nomeAluno = `Aluno: ${code.data}`;
+            const notaAluno = Math.floor(Math.random() * 10 + 1);  // Gera uma nota aleatória (1 a 10)
+            const resultado = `Nome: ${nomeAluno}, Nota: ${notaAluno}`;
+
+            const resultadoElemento = document.createElement('p');
+            resultadoElemento.textContent = resultado;
+            resultadosDiv.appendChild(resultadoElemento);
+        } else {
+            correctionMessage.style.display = "block";
+            correctionMessage.textContent = "Nenhum QR Code detectado. Tente novamente.";
+        }
+    });
+
+    // Inserir resultado manualmente - Passo 3
+    document.getElementById('addManualResult').addEventListener('click', function() {
+        const notaManual = document.getElementById('manualResult').value;
+        if (notaManual) {
+            const resultadoElemento = document.createElement('p');
+            resultadoElemento.textContent = `Resultado Manual: Nota = ${notaManual}`;
+            resultadosDiv.appendChild(resultadoElemento);
+        } else {
+            alert("Por favor, insira uma nota válida.");
+        }
+    });
+
     // Finalizar correção - Passo 4
-    const finishButton = document.getElementById("finishCorrection");
-    const resultadosDiv = document.getElementById("resultados");
-    finishButton.addEventListener("click", function() {
+    document.getElementById('finishCorrection').addEventListener('click', function() {
         resultadosDiv.innerHTML = "<p>Correção finalizada. Resultados gerados com sucesso!</p>";
         document.getElementById("printResultados").style.display = "inline";
     });

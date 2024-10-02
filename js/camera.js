@@ -4,7 +4,9 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
     const captureButton = document.getElementById('captureButton');
-    
+    const correctionMessage = document.getElementById('correctionMessage');
+    const resultadosDiv = document.getElementById('resultados');
+
     // Acessa a câmera do dispositivo
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(function(stream) {
@@ -27,10 +29,21 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         
         // Verifica se um QR code foi detectado
         if (code) {
-            alert("QR Code detectado: " + code.data);
-            // Aqui você pode processar o QR Code e enviar para o servidor ou banco de dados
+            correctionMessage.style.display = "block";
+            correctionMessage.textContent = "QR Code detectado: " + code.data;
+
+            // Aqui você pode processar o QR code, buscar o aluno no banco de dados ou lista, e calcular a nota
+            const nomeAluno = `Aluno: ${code.data}`;  // Simulação de busca do nome do aluno
+            const notaAluno = Math.floor(Math.random() * 10 + 1);  // Gera uma nota aleatória (1 a 10)
+            const resultado = `Nome: ${nomeAluno}, Nota: ${notaAluno}`;
+
+            // Exibe o resultado no elemento de resultados
+            const resultadoElemento = document.createElement('p');
+            resultadoElemento.textContent = resultado;
+            resultadosDiv.appendChild(resultadoElemento);
         } else {
-            alert("Nenhum QR Code detectado. Tente novamente.");
+            correctionMessage.style.display = "block";
+            correctionMessage.textContent = "Nenhum QR Code detectado. Tente novamente.";
         }
     });
 } else {

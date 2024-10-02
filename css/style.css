@@ -113,3 +113,39 @@ hr {
     display: none;
 }
 
+/* Estilo para as linhas de alunos (Nome e RA lado a lado) */
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.row label {
+    width: 30%;
+    text-align: left;
+}
+
+.row input {
+    width: 65%;
+}
+
+/* Estilização para os botões de ação ao final de cada passo */
+#gabaritoActions,
+#alunosActions {
+    margin-top: 20px;
+}
+
+#gabaritoActions button,
+#alunosActions button {
+    margin-bottom: 10px;
+}
+
+#resultados {
+    margin-top: 20px;
+    color: #2c7a7b;
+    font-weight: bold;
+    background-color: #f0fff4;
+    padding: 10px;
+    border-radius: 5px;
+}

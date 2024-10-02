@@ -92,6 +92,16 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("visualizarLista").style.display = "inline";
         document.getElementById("printAlunos").style.display = "inline";
     });
+// Lógica para buscar gabarito por nome ou data
+document.getElementById('btnSearchGabarito').addEventListener('click', function() {
+    const searchTerm = document.getElementById('searchGabarito').value;
+    if (searchTerm) {
+        alert(`Buscando gabarito para: ${searchTerm}`);
+        // Aqui você pode integrar com a lógica de busca real (banco de dados ou localStorage)
+    } else {
+        alert('Por favor, insira um termo de busca.');
+    }
+});
 
     // Função para visualizar a lista de alunos (em um pop-up)
     const visualizarListaButton = document.getElementById("visualizarLista");

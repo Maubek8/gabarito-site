@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const correctionMessage = document.getElementById("correctionMessage");
 
     // Gabarito - Passo 1
+    const nomeProvaInput = document.getElementById("nomeProva");
+    const dataProvaInput = document.getElementById("dataProva");
     const numQuestionsInput = document.getElementById("numQuestions");
     const questionsInputDiv = document.getElementById("questionsInput");
     const addQuestionsButton = document.getElementById("addQuestions");
@@ -33,8 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
     gabaritoForm.addEventListener("submit", function(event) {
         event.preventDefault(); // Prevenir recarregar página
 
+        const nomeProva = nomeProvaInput.value;
+        const dataProva = dataProvaInput.value;
+
         gabaritoMessage.style.display = "block";
-        gabaritoMessage.textContent = "Gabarito salvo com sucesso!";
+        gabaritoMessage.textContent = `Gabarito da prova "${nomeProva}" salvo com sucesso para a data ${dataProva}!`;
         document.getElementById("editGabarito").style.display = "inline";
         document.getElementById("printGabarito").style.display = "inline";
     });
@@ -65,11 +70,14 @@ document.addEventListener("DOMContentLoaded", function() {
             inputRA.name = `studentRA${i}`;
             inputRA.required = true;
 
-            studentsInputDiv.appendChild(labelName);
-            studentsInputDiv.appendChild(inputName);
-            studentsInputDiv.appendChild(labelRA);
-            studentsInputDiv.appendChild(inputRA);
-            studentsInputDiv.appendChild(document.createElement("br"));
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("row");
+            rowDiv.appendChild(labelName);
+            rowDiv.appendChild(inputName);
+            rowDiv.appendChild(labelRA);
+            rowDiv.appendChild(inputRA);
+
+            studentsInputDiv.appendChild(rowDiv);
         }
     });
 
@@ -81,7 +89,22 @@ document.addEventListener("DOMContentLoaded", function() {
         alunosMessage.style.display = "block";
         alunosMessage.textContent = "Lista de alunos salva com sucesso!";
         document.getElementById("editAlunos").style.display = "inline";
+        document.getElementById("visualizarLista").style.display = "inline";
         document.getElementById("printAlunos").style.display = "inline";
+    });
+
+    // Função para visualizar a lista de alunos (em um pop-up)
+    const visualizarListaButton = document.getElementById("visualizarLista");
+    visualizarListaButton.addEventListener("click", function() {
+        const alunosList = studentsInputDiv.querySelectorAll("input[name^='studentName']");
+        const raList = studentsInputDiv.querySelectorAll("input[name^='studentRA']");
+        let listaAlunos = "Lista de Alunos:\n";
+
+        alunosList.forEach((aluno, index) => {
+            listaAlunos += `Aluno: ${aluno.value}, RA: ${raList[index].value}\n`;
+        });
+
+        alert(listaAlunos);
     });
 
     // Finalizar correção - Passo 4

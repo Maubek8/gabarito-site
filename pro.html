@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Fácil - Versão Beta Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Nota Fácil - Versão Beta Pro</h1>
+            <img src="img/nf.jpg" alt="Logo Nota Fácil" class="logo">
+            <span class="powered-by">Powered by MK</span>
+        </header>
+
+        <section>
+            <h2>Criar Prova e Gabarito</h2>
+            <form id="provaForm">
+                <label for="nomeProva">Nome da Prova:</label>
+                <input type="text" id="nomeProva" placeholder="Ex: Prova de Matemática" required>
+
+                <label for="numQuestoes">Número de Questões:</label>
+                <input type="number" id="numQuestoes" min="1" required>
+
+                <button type="button" id="criarProva">Criar Prova</button>
+            </form>
+
+            <div id="gabaritoVisualizacao" style="display:none;">
+                <h2>Gabarito</h2>
+                <table id="tabelaGabarito"></table>
+                <button type="button" id="salvarGabarito">Salvar Gabarito</button>
+            </div>
+
+            <h2>Correção Rápida com Câmera</h2>
+            <video id="cameraFeed" autoplay></video>
+            <button type="button" id="capturarGabarito">Capturar e Corrigir</button>
+            <div id="resultadoCorrecao"></div>
+        </section>
+
+        <script src="js/pro.js"></script>
+    </div>
+</body>
+</html>
